@@ -333,6 +333,27 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      <nav className="fixed bottom-4 left-1/2 z-40 flex w-[calc(100%-2rem)] max-w-md -translate-x-1/2 items-center justify-between rounded-2xl border bg-white/90 px-3 py-2 shadow-lg backdrop-blur lg:hidden">
+        {[
+          { label: "Home", icon: LayoutGrid, active: true },
+          { label: "Projetos", icon: Folder },
+          { label: "Tarefas", icon: ClipboardList },
+          { label: "Kanban", icon: KanbanSquare },
+          { label: "Perfil", icon: User }
+        ].map((item) => (
+          <button
+            key={item.label}
+            type="button"
+            className={`flex flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] ${
+              item.active ? "text-stone-900" : "text-stone-500"
+            }`}
+          >
+            <item.icon className="h-4 w-4" />
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
       <TaskModal
         open={taskModalOpen}
         projects={projects}
