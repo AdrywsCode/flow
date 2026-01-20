@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ export default function DashboardPage() {
     };
   }, [filters, debouncedQuery]);
 
-  const loadProjects = async () => {
+  const loadProjects = useCallback(async () => {
     if (!isSupabaseConfigured) {
       setProjects([]);
       setProjectsLoading(false);
@@ -59,9 +59,9 @@ export default function DashboardPage() {
     } finally {
       setProjectsLoading(false);
     }
-  };
+  }, []);
 
-  const loadTasks = async () => {
+  const loadTasks = useCallback(async () => {
     if (!isSupabaseConfigured) {
       setTasks([]);
       setLoading(false);
@@ -76,15 +76,15 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchFilters]);
 
   useEffect(() => {
     void loadProjects();
-  }, []);
+  }, [loadProjects]);
 
   useEffect(() => {
     void loadTasks();
-  }, [fetchFilters]);
+  }, [loadTasks]);
 
   const handleLogout = async () => {
     if (!isSupabaseConfigured) {
