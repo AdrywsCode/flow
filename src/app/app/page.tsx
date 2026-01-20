@@ -14,11 +14,19 @@ import { TasksList } from "@/components/tasks-list";
 import { TaskModal } from "@/components/task-modal";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/env";
-import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { applyTaskFilters } from "@/lib/filters";
 import type { Project, Task } from "@/lib/types";
 import { createProject, deleteProject, fetchProjects, updateProject } from "@/services/projects";
 import { createTask, deleteTask, fetchTasks, updateTask, updateTaskStatus } from "@/services/tasks";
-import { ClipboardList, Folder, KanbanSquare, LayoutGrid, Settings, User } from "lucide-react";
+import {
+  ClipboardList,
+  Folder,
+  KanbanSquare,
+  LayoutGrid,
+  Plus,
+  Settings,
+  User
+} from "lucide-react";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -33,17 +41,15 @@ export default function DashboardPage() {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const debouncedQuery = useDebouncedValue(filters.q ?? "", 400);
 
   const fetchFilters = useMemo(() => {
     return {
       status: filters.status,
       priority: filters.priority,
       project: filters.project,
-      overdue: filters.overdue ? "1" : undefined,
-      q: debouncedQuery.trim() ? debouncedQuery : undefined
+      overdue: filters.overdue ? "1" : undefined
     };
-  }, [filters, debouncedQuery]);
+  }, [filters]);
 
   const loadProjects = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -182,8 +188,39 @@ export default function DashboardPage() {
     }
   };
 
+  const visibleTasks = useMemo(
+    () => applyTaskFilters(tasks, { ...filters, q: filters.q }),
+    [tasks, filters]
+  );
+
   return (
-    <main className="min-h-screen px-6 py-10">
+    <main className="min-h-screen px-6 pb-28 pt-24">
+      <div className="fixed left-1/2 top-6 z-40 flex w-[calc(100%-3rem)] max-w-6xl -translate-x-1/2 flex-col items-start gap-3 rounded-2xl border bg-white/90 px-4 py-3 shadow-lg backdrop-blur md:flex-row md:items-center">
+        <div className="flex items-center gap-2 text-sm font-semibold text-stone-900">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-900 text-white">TF</span>
+          <span className="hidden sm:inline">TaskFlow</span>
+        </div>
+        <div className="w-full flex-1 md:w-auto">
+          <Input
+            placeholder="Buscar tarefas, projetos ou descricoes..."
+            value={filters.q ?? ""}
+            onChange={(event) => setFilters({ ...filters, q: event.target.value })}
+            className="border-stone-200 bg-white text-stone-900 placeholder:text-stone-400"
+          />
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => {
+            setSelectedTask(null);
+            setTaskModalOpen(true);
+          }}
+          className="w-full md:w-auto"
+        >
+          <Plus className="h-4 w-4" />
+          Nova tarefa
+        </Button>
+      </div>
+
       <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[240px_1fr]">
         <aside className="hidden h-full rounded-3xl border bg-white/70 p-4 lg:flex lg:flex-col lg:gap-4">
           <div className="rounded-2xl border bg-white px-3 py-3">
@@ -200,7 +237,7 @@ export default function DashboardPage() {
                 <button
                   key={item.label}
                   type="button"
-                  className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm ${
+                  className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm transition ${
                     item.active ? "bg-stone-900 text-white" : "text-stone-600 hover:bg-white"
                   }`}
                 >
@@ -318,12 +355,12 @@ export default function DashboardPage() {
                   Buscando tarefas...
                 </div>
               ) : view === "kanban" ? (
-                <KanbanBoard tasks={tasks} onEdit={(task) => {
+                <KanbanBoard tasks={visibleTasks} onEdit={(task) => {
                   setSelectedTask(task);
                   setTaskModalOpen(true);
                 }} onDelete={handleDeleteTask} onMove={handleMoveTask} />
               ) : (
-                <TasksList tasks={tasks} onEdit={(task) => {
+                <TasksList tasks={visibleTasks} onEdit={(task) => {
                   setSelectedTask(task);
                   setTaskModalOpen(true);
                 }} onDelete={handleDeleteTask} onMove={handleMoveTask} />
@@ -344,7 +381,7 @@ export default function DashboardPage() {
           <button
             key={item.label}
             type="button"
-            className={`flex flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] ${
+            className={`flex flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition ${
               item.active ? "text-stone-900" : "text-stone-500"
             }`}
           >
