@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ProjectSelect } from "@/components/project-select";
-import { taskPriorities, taskStatuses } from "@/lib/constants";
+import { taskPriorityLabels, taskStatusLabels, taskPriorities, taskStatuses } from "@/lib/constants";
 import { taskSchema } from "@/lib/validations";
 import type { Project, Task } from "@/lib/types";
 
@@ -92,7 +92,7 @@ export function TaskModal({ open, projects, task, onClose, onSubmit }: TaskModal
                 <SelectContent>
                   {taskStatuses.map((status) => (
                     <SelectItem key={status} value={status}>
-                      {status}
+                      {taskStatusLabels[status]}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -112,7 +112,7 @@ export function TaskModal({ open, projects, task, onClose, onSubmit }: TaskModal
                 <SelectContent>
                   {taskPriorities.map((priority) => (
                     <SelectItem key={priority} value={priority}>
-                      {priority}
+                      {taskPriorityLabels[priority]}
                     </SelectItem>
                   ))}
                 </SelectContent>

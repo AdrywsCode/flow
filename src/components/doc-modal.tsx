@@ -50,6 +50,18 @@ export function DocModal({ open, doc, onClose, onSubmit }: DocModalProps) {
     }
   }, [doc, form]);
 
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = typeof reader.result === "string" ? reader.result : "";
+      form.setValue("content", text, { shouldDirty: true });
+    };
+    reader.readAsText(file);
+    event.target.value = "";
+  };
+
   return (
     <Dialog open={open} onOpenChange={(value) => !value && onClose()}>
       <DialogContent className="max-w-2xl">
@@ -113,6 +125,27 @@ export function DocModal({ open, doc, onClose, onSubmit }: DocModalProps) {
             {form.formState.errors.content && (
               <p className="text-xs text-rose-600">{form.formState.errors.content.message}</p>
             )}
+          </div>
+          <div className="space-y-2">
+            <Label>Upload de arquivo</Label>
+            <div className="flex flex-wrap items-center gap-3">
+              <label
+                htmlFor="doc-upload"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl border bg-white px-4 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50"
+              >
+                Escolher arquivo
+              </label>
+              <span className="text-xs text-muted-foreground">
+                Suporta .md, .txt, .html, .css e .js.
+              </span>
+            </div>
+            <input
+              id="doc-upload"
+              type="file"
+              accept=".md,.txt,.html,.css,.js"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>

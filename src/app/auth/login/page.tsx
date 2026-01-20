@@ -68,21 +68,29 @@ export default function LoginPage() {
       <div className="grid gap-3 sm:grid-cols-2">
         <Button
           variant="outline"
-          className="border-stone-300 bg-white/70 text-stone-800 hover:bg-white"
+          className="border-stone-200 bg-white/80 text-stone-700 hover:bg-white"
           type="button"
           onClick={() => handleOAuth("google")}
         >
           <Chrome className="h-4 w-4" />
-          Entrar com Google
+          <span className="text-stone-600">Entrar com</span>
+          <span className="font-semibold">
+            <span className="text-[#4285F4]">G</span>
+            <span className="text-[#EA4335]">o</span>
+            <span className="text-[#FBBC05]">o</span>
+            <span className="text-[#4285F4]">g</span>
+            <span className="text-[#34A853]">l</span>
+            <span className="text-[#EA4335]">e</span>
+          </span>
         </Button>
         <Button
           variant="outline"
-          className="border-stone-300 bg-white/70 text-stone-800 hover:bg-white"
+          className="border-[#6e40c9] bg-white/80 text-[#6e40c9] hover:bg-white"
           type="button"
           onClick={() => handleOAuth("github")}
         >
           <Github className="h-4 w-4" />
-          Entrar com Github
+          Entrar com GitHub
         </Button>
       </div>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -112,7 +120,7 @@ export default function LoginPage() {
         </div>
         <Button
           type="submit"
-          className="h-12 w-full bg-stone-900 text-white hover:bg-stone-800"
+          className="h-12 w-full bg-[var(--auth-accent)] text-white hover:brightness-95"
           disabled={form.formState.isSubmitting}
         >
           Entrar

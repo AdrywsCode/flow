@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Project } from "@/lib/types";
-import { taskPriorities, taskStatuses } from "@/lib/constants";
+import { taskPriorityLabels, taskStatusLabels, taskPriorities, taskStatuses } from "@/lib/constants";
 
 export type FiltersState = {
   status?: string;
@@ -34,7 +34,7 @@ export function FiltersBar({ projects, value, onChange }: FiltersBarProps) {
             <SelectItem value="all">Todos</SelectItem>
             {taskStatuses.map((status) => (
               <SelectItem key={status} value={status}>
-                {status}
+                {taskStatusLabels[status]}
               </SelectItem>
             ))}
           </SelectContent>
@@ -56,7 +56,7 @@ export function FiltersBar({ projects, value, onChange }: FiltersBarProps) {
             <SelectItem value="all">Todas</SelectItem>
             {taskPriorities.map((priority) => (
               <SelectItem key={priority} value={priority}>
-                {priority}
+                {taskPriorityLabels[priority]}
               </SelectItem>
             ))}
           </SelectContent>

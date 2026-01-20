@@ -1,3 +1,4 @@
+import { taskStatusLabels } from "@/lib/constants";
 import { groupTasksByStatus } from "@/lib/filters";
 import type { Task } from "@/lib/types";
 import { TaskCard } from "@/components/task-card";
@@ -10,9 +11,9 @@ type KanbanBoardProps = {
 };
 
 const columns = [
-  { key: "todo", title: "Todo" },
-  { key: "doing", title: "Doing" },
-  { key: "done", title: "Done" }
+  { key: "todo", title: taskStatusLabels.todo },
+  { key: "doing", title: taskStatusLabels.doing },
+  { key: "done", title: taskStatusLabels.done }
 ] as const;
 
 export function KanbanBoard({ tasks, onEdit, onDelete, onMove }: KanbanBoardProps) {

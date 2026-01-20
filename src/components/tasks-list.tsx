@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { taskPriorityLabels, taskStatusLabels } from "@/lib/constants";
 import type { Task } from "@/lib/types";
 
 type TasksListProps = {
@@ -34,8 +35,8 @@ export function TasksList({ tasks, onEdit, onDelete, onMove }: TasksListProps) {
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-semibold">{task.title}</h3>
-              <Badge variant={priorityVariant[task.priority]}>{task.priority}</Badge>
-              <Badge>{task.status}</Badge>
+              <Badge variant={priorityVariant[task.priority]}>{taskPriorityLabels[task.priority]}</Badge>
+              <Badge>{taskStatusLabels[task.status]}</Badge>
             </div>
             {task.description && <p className="text-xs text-muted-foreground">{task.description}</p>}
             <div className="text-xs text-muted-foreground">
@@ -44,13 +45,13 @@ export function TasksList({ tasks, onEdit, onDelete, onMove }: TasksListProps) {
           </div>
           <div className="flex flex-wrap gap-2">
             <Button size="sm" variant="outline" onClick={() => onMove(task, "todo")}>
-              Todo
+              {taskStatusLabels.todo}
             </Button>
             <Button size="sm" variant="outline" onClick={() => onMove(task, "doing")}>
-              Doing
+              {taskStatusLabels.doing}
             </Button>
             <Button size="sm" variant="outline" onClick={() => onMove(task, "done")}>
-              Done
+              {taskStatusLabels.done}
             </Button>
             <Button size="sm" variant="secondary" onClick={() => onEdit(task)}>
               Editar

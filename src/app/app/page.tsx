@@ -25,7 +25,7 @@ import {
   Folder,
   KanbanSquare,
   LayoutGrid,
-  Plus,
+  Search,
   Settings,
   User
 } from "lucide-react";
@@ -197,11 +197,10 @@ export default function DashboardPage() {
   );
 
   return (
-    <main className="min-h-screen px-6 pb-28 pt-24">
+    <main className="min-h-screen px-6 pb-28 pt-32">
       <div className="fixed left-1/2 top-6 z-40 flex w-[calc(100%-3rem)] max-w-6xl -translate-x-1/2 flex-col items-start gap-3 rounded-2xl border bg-white/90 px-4 py-3 shadow-lg backdrop-blur md:flex-row md:items-center">
         <div className="flex items-center gap-2 text-sm font-semibold text-stone-900">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-900 text-white">TF</span>
-          <span className="hidden sm:inline">TaskFlow</span>
+          <span className="text-base font-semibold">AxiTask.</span>
         </div>
         <div className="w-full flex-1 md:w-auto">
           <Input
@@ -211,23 +210,19 @@ export default function DashboardPage() {
             className="border-stone-200 bg-white text-stone-900 placeholder:text-stone-400"
           />
         </div>
-        <Button
-          variant="outline"
-          onClick={() => {
-            setSelectedTask(null);
-            setTaskModalOpen(true);
-          }}
-          className="w-full md:w-auto"
-        >
-          <Plus className="h-4 w-4" />
-          Nova tarefa
-        </Button>
       </div>
 
       <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[240px_1fr]">
         <aside className="hidden h-full rounded-3xl border bg-white/70 p-4 lg:flex lg:flex-col lg:gap-4">
           <div className="rounded-2xl border bg-white px-3 py-3">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Menu</p>
+            <div className="flex items-center gap-2 rounded-xl border bg-white px-3 py-2 text-sm text-stone-600">
+              <Search className="h-4 w-4 text-stone-400" />
+              <input
+                placeholder="Pesquisar..."
+                className="w-full bg-transparent text-sm text-stone-700 outline-none placeholder:text-stone-400"
+              />
+            </div>
+            <p className="mt-4 text-xs uppercase tracking-wide text-muted-foreground">Menu</p>
             <div className="mt-3 space-y-1">
               {[
                 { label: "Dashboard", icon: LayoutGrid, href: "/app" },
@@ -248,7 +243,13 @@ export default function DashboardPage() {
                     {item.label}
                   </Link>
                 ) : (
-                  <button key={item.label} type="button" className={classes}>
+                  <button
+                    key={item.label}
+                    type="button"
+                    className={`${classes} cursor-not-allowed opacity-60`}
+                    aria-disabled="true"
+                    title="Em breve"
+                  >
                     <item.icon className="h-4 w-4" />
                     {item.label}
                   </button>
@@ -398,7 +399,13 @@ export default function DashboardPage() {
               {item.label}
             </Link>
           ) : (
-            <button key={item.label} type="button" className={classes}>
+            <button
+              key={item.label}
+              type="button"
+              className={`${classes} cursor-not-allowed opacity-60`}
+              aria-disabled="true"
+              title="Em breve"
+            >
               <item.icon className="h-4 w-4" />
               {item.label}
             </button>

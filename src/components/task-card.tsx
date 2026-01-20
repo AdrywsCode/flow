@@ -1,6 +1,7 @@
 import { format, parseISO } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { taskPriorityLabels, taskStatusLabels } from "@/lib/constants";
 import type { Task } from "@/lib/types";
 
 type TaskCardProps = {
@@ -31,11 +32,11 @@ export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
           <h3 className="text-sm font-semibold">{task.title}</h3>
           {task.description && <p className="mt-1 text-xs text-muted-foreground">{task.description}</p>}
         </div>
-        <Badge variant={priorityVariant[task.priority]}>{task.priority}</Badge>
+        <Badge variant={priorityVariant[task.priority]}>{taskPriorityLabels[task.priority]}</Badge>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-        <span className="rounded-full border px-2 py-0.5">{task.status}</span>
+        <span className="rounded-full border px-2 py-0.5">{taskStatusLabels[task.status]}</span>
         {task.project?.name && <span>{task.project.name}</span>}
         {task.due_date && <span>{format(parseISO(task.due_date), "dd/MM/yyyy")}</span>}
       </div>
@@ -48,7 +49,7 @@ export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
             variant="outline"
             onClick={() => onMove(task, status)}
           >
-            Mover para {status === "todo" ? "Todo" : status === "doing" ? "Doing" : "Done"}
+            Mover para {taskStatusLabels[status]}
           </Button>
         ))}
         <Button size="sm" variant="secondary" onClick={() => onEdit(task)}>

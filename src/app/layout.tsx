@@ -8,7 +8,10 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space
 export const metadata: Metadata = {
   title: "TaskFlow",
   description: "Gerenciador de tarefas com projetos, kanban e filtros.",
-  manifest: "/manifest.webmanifest",
+  manifest: "/manifest.webmanifest"
+};
+
+export const viewport = {
   themeColor: "#f97316"
 };
 
