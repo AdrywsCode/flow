@@ -62,13 +62,13 @@ export default function RegisterPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold text-white">Criar conta</h1>
-        <p className="text-sm text-zinc-400">Comece a organizar seus projetos.</p>
+        <h1 className="text-2xl font-semibold text-stone-900">Criar conta</h1>
+        <p className="text-sm text-stone-600">Comece a organizar seus projetos.</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <Button
           variant="outline"
-          className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900"
+          className="border-stone-300 bg-white/70 text-stone-800 hover:bg-white"
           type="button"
           onClick={() => handleOAuth("google")}
         >
@@ -77,7 +77,7 @@ export default function RegisterPage() {
         </Button>
         <Button
           variant="outline"
-          className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900"
+          className="border-stone-300 bg-white/70 text-stone-800 hover:bg-white"
           type="button"
           onClick={() => handleOAuth("github")}
         >
@@ -87,19 +87,19 @@ export default function RegisterPage() {
       </div>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-xs text-zinc-400">
+          <Label htmlFor="email" className="text-xs text-stone-600">
             Email
           </Label>
           <Input
             id="email"
             type="email"
             placeholder="voce@email.com"
-            className="border-zinc-800 bg-zinc-900 text-white placeholder:text-zinc-600"
+            className="border-stone-300 bg-white/80 text-stone-900 placeholder:text-stone-400"
             {...form.register("email")}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-xs text-zinc-400">
+          <Label htmlFor="password" className="text-xs text-stone-600">
             Senha
           </Label>
           <div className="relative">
@@ -107,23 +107,23 @@ export default function RegisterPage() {
               id="password"
               type="password"
               placeholder="••••••••"
-              className="border-zinc-800 bg-zinc-900 text-white placeholder:text-zinc-600"
+              className="border-stone-300 bg-white/80 text-stone-900 placeholder:text-stone-400"
               {...form.register("password")}
             />
-            <Eye className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600" />
+            <Eye className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
           </div>
         </div>
         <Button
           type="submit"
-          className="h-12 w-full bg-white text-black hover:bg-zinc-200"
+          className="h-12 w-full bg-stone-900 text-white hover:bg-stone-800"
           disabled={form.formState.isSubmitting}
         >
           Criar conta
         </Button>
       </form>
-      <p className="text-center text-sm text-zinc-400">
+      <p className="text-center text-sm text-stone-600">
         Ja tem conta?{" "}
-        <Link className="font-semibold text-white" href="/auth/login">
+        <Link className="font-semibold text-stone-900" href="/auth/login">
           Entrar
         </Link>
       </p>
