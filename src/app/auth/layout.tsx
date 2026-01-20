@@ -2,7 +2,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   return (
     <main className="min-h-screen px-4 py-8 md:px-10">
       <div className="mx-auto grid min-h-[80vh] w-full max-w-5xl overflow-hidden rounded-[32px] md:grid-cols-2">
-        <section className="relative flex flex-col justify-center gap-8 bg-gradient-to-b from-[#f7c38a] via-[#f4d8c9] to-[#1b120e] px-6 py-10 text-stone-900 md:px-12">
+        <section className="relative hidden flex-col justify-center gap-8 bg-gradient-to-b from-[#f7c38a] via-[#f4d8c9] to-[#1b120e] px-6 py-10 text-stone-900 md:flex md:px-12">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-stone-800">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-stone-900 text-white">
               TF
