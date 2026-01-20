@@ -1,13 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { taskPriorityLabels, taskStatusLabels } from "@/lib/constants";
+import { taskPriorityLabels, taskStatusBadgeClasses, taskStatusLabels } from "@/lib/constants";
 import type { Task } from "@/lib/types";
 
 type TasksListProps = {
   tasks: Task[];
   onEdit: (task: Task) => void;
   onDelete: (task: Task) => void;
-  onMove: (task: Task, status: Task["status"]) => void;
 };
 
 const priorityVariant = {
@@ -16,7 +15,7 @@ const priorityVariant = {
   high: "danger"
 } as const;
 
-export function TasksList({ tasks, onEdit, onDelete, onMove }: TasksListProps) {
+export function TasksList({ tasks, onEdit, onDelete }: TasksListProps) {
   if (tasks.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed bg-white/80 p-6 text-sm text-muted-foreground">
@@ -33,10 +32,12 @@ export function TasksList({ tasks, onEdit, onDelete, onMove }: TasksListProps) {
           className="flex flex-col gap-4 rounded-2xl border bg-white p-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-md md:flex-row"
         >
           <div className="flex-1 space-y-2">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold">{task.title}</h3>
+            <div className="flex min-w-0 items-center gap-2">
+              <h3 className="min-w-0 flex-1 truncate text-sm font-semibold">{task.title}</h3>
               <Badge variant={priorityVariant[task.priority]}>{taskPriorityLabels[task.priority]}</Badge>
-              <Badge>{taskStatusLabels[task.status]}</Badge>
+              <Badge className={taskStatusBadgeClasses[task.status]}>
+                {taskStatusLabels[task.status]}
+              </Badge>
             </div>
             {task.description && <p className="text-xs text-muted-foreground">{task.description}</p>}
             <div className="text-xs text-muted-foreground">
@@ -44,15 +45,6 @@ export function TasksList({ tasks, onEdit, onDelete, onMove }: TasksListProps) {
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" onClick={() => onMove(task, "todo")}>
-              {taskStatusLabels.todo}
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => onMove(task, "doing")}>
-              {taskStatusLabels.doing}
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => onMove(task, "done")}>
-              {taskStatusLabels.done}
-            </Button>
             <Button size="sm" variant="secondary" onClick={() => onEdit(task)}>
               Editar
             </Button>

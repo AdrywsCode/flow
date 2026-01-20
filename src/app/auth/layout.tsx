@@ -28,7 +28,7 @@ const variants = {
     step: "bg-white text-stone-900",
     stepMuted: "bg-white/60 text-stone-700",
     headline: "Comece sua jornada com foco total",
-    subtitle: "Crie projetos, priorize tarefas e acompanhe sua evolucao com um Kanban elegante."
+    subtitle: "Crie projetos, priorize tarefas e acompanhe sua evolucao com um quadro elegante."
   },
   retro: {
     accent: "#22d3ee",
@@ -110,7 +110,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/70 text-stone-700">
                 3
               </span>
-              Arraste tarefas no Kanban
+              Arraste tarefas no quadro
             </div>
           </div>
         </section>

@@ -17,8 +17,9 @@ import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/env";
 import { applyTaskFilters } from "@/lib/filters";
 import type { Project, Task } from "@/lib/types";
-import { createProject, deleteProject, fetchProjects, updateProject } from "@/services/projects";
-import { createTask, deleteTask, fetchTasks, updateTask, updateTaskStatus } from "@/services/tasks";
+import { fetchDashboard } from "@/services/dashboard";
+import { createProject, deleteProject, updateProject } from "@/services/projects";
+import { createTask, deleteTask, updateTask } from "@/services/tasks";
 import {
   ClipboardList,
   BookOpen,
@@ -54,47 +55,37 @@ export default function DashboardPage() {
     };
   }, [filters]);
 
-  const loadProjects = useCallback(async () => {
+  const loadDashboard = useCallback(async () => {
     if (!isSupabaseConfigured) {
       setProjects([]);
-      setProjectsLoading(false);
-      return;
-    }
-    try {
-      setProjectsLoading(true);
-      const data = await fetchProjects();
-      setProjects(data);
-    } catch (error) {
-      toast.error("Erro ao carregar projetos", { description: String(error) });
-    } finally {
-      setProjectsLoading(false);
-    }
-  }, []);
-
-  const loadTasks = useCallback(async () => {
-    if (!isSupabaseConfigured) {
       setTasks([]);
+      setProjectsLoading(false);
       setLoading(false);
       return;
     }
     try {
+      setProjectsLoading(true);
       setLoading(true);
-      const data = await fetchTasks(fetchFilters);
-      setTasks(data);
+      const data = await fetchDashboard(fetchFilters);
+      setProjects(data.projects);
+      setTasks(data.tasks);
     } catch (error) {
-      toast.error("Erro ao carregar tarefas", { description: String(error) });
+      toast.error("Erro ao carregar dados", { description: String(error) });
     } finally {
+      setProjectsLoading(false);
       setLoading(false);
     }
   }, [fetchFilters]);
 
   useEffect(() => {
-    void loadProjects();
-  }, [loadProjects]);
+    void loadDashboard();
+  }, [loadDashboard]);
 
   useEffect(() => {
-    void loadTasks();
-  }, [loadTasks]);
+    if (view === "list") {
+      setFilters((current) => (current.status ? current : { ...current, status: "todo" }));
+    }
+  }, [view]);
 
   const handleLogout = async () => {
     if (!isSupabaseConfigured) {
@@ -123,7 +114,7 @@ export default function DashboardPage() {
       setProjectModalOpen(false);
       setProjectName("");
       setEditingProject(null);
-      await loadProjects();
+      await loadDashboard();
     } catch (error) {
       toast.error("Erro ao salvar projeto", { description: String(error) });
     }
@@ -134,8 +125,7 @@ export default function DashboardPage() {
     try {
       await deleteProject(project.id);
       toast.success("Projeto removido");
-      await loadProjects();
-      await loadTasks();
+      await loadDashboard();
     } catch (error) {
       toast.error("Erro ao excluir projeto", { description: String(error) });
     }
@@ -165,7 +155,7 @@ export default function DashboardPage() {
       }
       setTaskModalOpen(false);
       setSelectedTask(null);
-      await loadTasks();
+      await loadDashboard();
     } catch (error) {
       toast.error("Erro ao salvar tarefa", { description: String(error) });
     }
@@ -176,20 +166,12 @@ export default function DashboardPage() {
     try {
       await deleteTask(task.id);
       toast.success("Tarefa removida");
-      await loadTasks();
+      await loadDashboard();
     } catch (error) {
       toast.error("Erro ao excluir tarefa", { description: String(error) });
     }
   };
 
-  const handleMoveTask = async (task: Task, status: Task["status"]) => {
-    try {
-      await updateTaskStatus(task.id, status);
-      await loadTasks();
-    } catch (error) {
-      toast.error("Erro ao mover tarefa", { description: String(error) });
-    }
-  };
 
   const visibleTasks = useMemo(
     () => applyTaskFilters(tasks, { ...filters, q: filters.q }),
@@ -229,7 +211,7 @@ export default function DashboardPage() {
                 { label: "Docs", icon: BookOpen, href: "/app/docs" },
                 { label: "Projetos", icon: Folder },
                 { label: "Tarefas", icon: ClipboardList },
-                { label: "Kanban", icon: KanbanSquare },
+                { label: "Quadro", icon: KanbanSquare },
                 { label: "Perfil", icon: User },
                 { label: "Ajustes", icon: Settings }
               ].map((item) => {
@@ -347,11 +329,21 @@ export default function DashboardPage() {
               <FiltersBar projects={projects} value={filters} onChange={setFilters} />
 
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex gap-2">
-                  <Button variant={view === "kanban" ? "default" : "outline"} onClick={() => setView("kanban")}>
-                    Kanban
+                <div className="flex items-center gap-1 rounded-full border bg-white/70 p-1">
+                  <Button
+                    size="sm"
+                    variant={view === "kanban" ? "default" : "ghost"}
+                    className="rounded-full px-4"
+                    onClick={() => setView("kanban")}
+                  >
+                    Quadro
                   </Button>
-                  <Button variant={view === "list" ? "default" : "outline"} onClick={() => setView("list")}>
+                  <Button
+                    size="sm"
+                    variant={view === "list" ? "default" : "ghost"}
+                    className="rounded-full px-4"
+                    onClick={() => setView("list")}
+                  >
                     Lista
                   </Button>
                 </div>
@@ -368,12 +360,12 @@ export default function DashboardPage() {
                 <KanbanBoard tasks={visibleTasks} onEdit={(task) => {
                   setSelectedTask(task);
                   setTaskModalOpen(true);
-                }} onDelete={handleDeleteTask} onMove={handleMoveTask} />
+                }} onDelete={handleDeleteTask} />
               ) : (
                 <TasksList tasks={visibleTasks} onEdit={(task) => {
                   setSelectedTask(task);
                   setTaskModalOpen(true);
-                }} onDelete={handleDeleteTask} onMove={handleMoveTask} />
+                }} onDelete={handleDeleteTask} />
               )}
             </div>
           </section>
@@ -386,7 +378,7 @@ export default function DashboardPage() {
           { label: "Docs", icon: BookOpen, href: "/app/docs" },
           { label: "Projetos", icon: Folder },
           { label: "Tarefas", icon: ClipboardList },
-          { label: "Kanban", icon: KanbanSquare },
+          { label: "Quadro", icon: KanbanSquare },
           { label: "Perfil", icon: User }
         ].map((item) => {
           const isActive = item.href ? pathname === item.href : false;

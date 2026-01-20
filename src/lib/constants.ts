@@ -10,6 +10,12 @@ export const taskStatusLabels: Record<TaskStatus, string> = {
   done: "Concluido"
 };
 
+export const taskStatusBadgeClasses: Record<TaskStatus, string> = {
+  todo: "bg-blue-100 text-blue-900 border-blue-100",
+  doing: "bg-amber-100 text-amber-900 border-amber-100",
+  done: "bg-emerald-100 text-emerald-900 border-emerald-100"
+};
+
 export const taskPriorityLabels: Record<TaskPriority, string> = {
   low: "Baixa",
   medium: "Media",

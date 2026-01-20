@@ -28,7 +28,7 @@ export default async function HomePage() {
             TaskFlow. Planeje projetos, priorize tarefas e avance no seu ritmo.
           </h1>
           <p className="max-w-2xl text-lg text-muted-foreground animate-fade-up [animation-delay:220ms]">
-            Um gerenciador de tarefas focado em produtividade pessoal, com Kanban, filtros inteligentes e
+            Um gerenciador de tarefas focado em produtividade pessoal, com quadro, filtros inteligentes e
             feedbacks visuais para manter o foco.
           </p>
           {isSupabaseConfigured ? (
@@ -51,7 +51,7 @@ export default async function HomePage() {
           <div className="absolute -left-6 top-6 h-24 w-24 rounded-full bg-amber-200/70 blur-2xl" />
           <div className="rounded-3xl border bg-white/80 p-5 shadow-lg">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Kanban rapido</span>
+              <span>Quadro rapido</span>
               <span>Hoje</span>
             </div>
             <div className="mt-4 space-y-3">
@@ -74,7 +74,7 @@ export default async function HomePage() {
       <section className="mt-8 grid gap-4 md:grid-cols-3">
         {[
           {
-            title: "Kanban fluido",
+            title: "Quadro fluido",
             description: "Visualize o progresso com colunas claras e movimento rapido."
           },
           {
@@ -100,7 +100,7 @@ export default async function HomePage() {
         {[
           { step: "01", title: "Crie seus projetos", text: "Separe por areas e mantenha o foco." },
           { step: "02", title: "Distribua tarefas", text: "Defina prioridades e datas-chave." },
-          { step: "03", title: "Arraste no Kanban", text: "Acompanhe o progresso em tempo real." }
+          { step: "03", title: "Arraste no quadro", text: "Acompanhe o progresso em tempo real." }
         ].map((item) => (
           <div key={item.step} className="space-y-3">
             <div className="text-sm font-semibold text-stone-500">{item.step}</div>
@@ -127,7 +127,7 @@ export default async function HomePage() {
               a: "Sim. As politicas RLS garantem que cada usuario veja apenas seus dados."
             },
             {
-              q: "Tem modo lista e Kanban?",
+              q: "Tem modo lista e quadro?",
               a: "Sim. Voce alterna quando quiser, mantendo os mesmos filtros."
             }
           ].map((item) => (

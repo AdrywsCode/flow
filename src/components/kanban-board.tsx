@@ -7,7 +7,6 @@ type KanbanBoardProps = {
   tasks: Task[];
   onEdit: (task: Task) => void;
   onDelete: (task: Task) => void;
-  onMove: (task: Task, status: Task["status"]) => void;
 };
 
 const columns = [
@@ -16,7 +15,7 @@ const columns = [
   { key: "done", title: taskStatusLabels.done }
 ] as const;
 
-export function KanbanBoard({ tasks, onEdit, onDelete, onMove }: KanbanBoardProps) {
+export function KanbanBoard({ tasks, onEdit, onDelete }: KanbanBoardProps) {
   const grouped = groupTasksByStatus(tasks);
 
   return (
@@ -38,7 +37,7 @@ export function KanbanBoard({ tasks, onEdit, onDelete, onMove }: KanbanBoardProp
               </p>
             ) : (
               grouped[column.key].map((task) => (
-                <TaskCard key={task.id} task={task} onEdit={onEdit} onDelete={onDelete} onMove={onMove} />
+                <TaskCard key={task.id} task={task} onEdit={onEdit} onDelete={onDelete} />
               ))
             )}
           </div>
