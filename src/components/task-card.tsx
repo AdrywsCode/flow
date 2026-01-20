@@ -25,7 +25,7 @@ export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
         : ["todo", "doing"];
 
   return (
-    <div className="space-y-3 rounded-2xl border bg-white p-4 shadow-sm">
+    <div className="space-y-3 rounded-2xl border bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
       <div className="flex items-start justify-between gap-2">
         <div>
           <h3 className="text-sm font-semibold">{task.title}</h3>
