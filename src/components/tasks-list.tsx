@@ -27,7 +27,10 @@ export function TasksList({ tasks, onEdit, onDelete, onMove }: TasksListProps) {
   return (
     <div className="space-y-3">
       {tasks.map((task) => (
-        <div key={task.id} className="flex flex-col gap-4 rounded-2xl border bg-white p-4 md:flex-row">
+        <div
+          key={task.id}
+          className="flex flex-col gap-4 rounded-2xl border bg-white p-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-md md:flex-row"
+        >
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-semibold">{task.title}</h3>
