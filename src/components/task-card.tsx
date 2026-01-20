@@ -17,8 +17,12 @@ const priorityVariant = {
 } as const;
 
 export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
-  const nextStatuses =
-    task.status === "todo" ? ["doing", "done"] : task.status === "doing" ? ["done", "todo"] : ["todo", "doing"];
+  const nextStatuses: Task["status"][] =
+    task.status === "todo"
+      ? ["doing", "done"]
+      : task.status === "doing"
+        ? ["done", "todo"]
+        : ["todo", "doing"];
 
   return (
     <div className="space-y-3 rounded-2xl border bg-white p-4 shadow-sm">
