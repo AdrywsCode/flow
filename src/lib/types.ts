@@ -1,4 +1,4 @@
-import type { TaskPriority, TaskStatus } from "@/lib/constants";
+import type { DocLanguage, DocVisibility, TaskPriority, TaskStatus } from "@/lib/constants";
 
 export type Project = {
   id: string;
@@ -17,4 +17,14 @@ export type Task = {
   created_at: string;
   updated_at: string;
   project?: Project | null;
+};
+
+export type Doc = {
+  id: string;
+  title: string;
+  content: string;
+  language: DocLanguage;
+  visibility: DocVisibility;
+  created_at: string;
+  updated_at: string;
 };

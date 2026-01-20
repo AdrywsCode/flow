@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { taskPriorities, taskStatuses } from "@/lib/constants";
+import { docLanguages, docVisibilities, taskPriorities, taskStatuses } from "@/lib/constants";
 
 export const projectSchema = z.object({
   name: z.string().min(1, "Nome obrigatorio").max(120)
@@ -27,5 +27,20 @@ export const filtersSchema = z.object({
   priority: z.enum(taskPriorities).optional(),
   project: z.string().uuid().optional(),
   overdue: z.string().optional(),
+  q: z.string().optional()
+});
+
+export const docSchema = z.object({
+  title: z.string().min(1, "Titulo obrigatorio").max(160),
+  content: z.string().min(1, "Conteudo obrigatorio").max(20000),
+  language: z.enum(docLanguages),
+  visibility: z.enum(docVisibilities)
+});
+
+export const docUpdateSchema = docSchema.partial();
+
+export const docFiltersSchema = z.object({
+  language: z.enum(docLanguages).optional(),
+  visibility: z.enum(docVisibilities).optional(),
   q: z.string().optional()
 });

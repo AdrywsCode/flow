@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -20,6 +21,7 @@ import { createProject, deleteProject, fetchProjects, updateProject } from "@/se
 import { createTask, deleteTask, fetchTasks, updateTask, updateTaskStatus } from "@/services/tasks";
 import {
   ClipboardList,
+  BookOpen,
   Folder,
   KanbanSquare,
   LayoutGrid,
@@ -30,6 +32,7 @@ import {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const [projects, setProjects] = useState<Project[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filters, setFilters] = useState<FiltersState>({});
@@ -227,24 +230,30 @@ export default function DashboardPage() {
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Menu</p>
             <div className="mt-3 space-y-1">
               {[
-                { label: "Dashboard", icon: LayoutGrid, active: true },
+                { label: "Dashboard", icon: LayoutGrid, href: "/app" },
+                { label: "Docs", icon: BookOpen, href: "/app/docs" },
                 { label: "Projetos", icon: Folder },
                 { label: "Tarefas", icon: ClipboardList },
                 { label: "Kanban", icon: KanbanSquare },
                 { label: "Perfil", icon: User },
                 { label: "Ajustes", icon: Settings }
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  type="button"
-                  className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm transition ${
-                    item.active ? "bg-stone-900 text-white" : "text-stone-600 hover:bg-white"
-                  }`}
-                >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
-                </button>
-              ))}
+              ].map((item) => {
+                const isActive = item.href ? pathname === item.href : false;
+                const classes = `flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm transition ${
+                  isActive ? "bg-stone-900 text-white" : "text-stone-600 hover:bg-white"
+                }`;
+                return item.href ? (
+                  <Link key={item.label} href={item.href} className={classes}>
+                    <item.icon className="h-4 w-4" />
+                    {item.label}
+                  </Link>
+                ) : (
+                  <button key={item.label} type="button" className={classes}>
+                    <item.icon className="h-4 w-4" />
+                    {item.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
           <div className="rounded-2xl border bg-white/80 p-3 text-xs text-muted-foreground">
@@ -372,23 +381,29 @@ export default function DashboardPage() {
 
       <nav className="fixed bottom-4 left-1/2 z-40 flex w-[calc(100%-2rem)] max-w-md -translate-x-1/2 items-center justify-between rounded-2xl border bg-white/90 px-3 py-2 shadow-lg backdrop-blur lg:hidden">
         {[
-          { label: "Home", icon: LayoutGrid, active: true },
+          { label: "Home", icon: LayoutGrid, href: "/app" },
+          { label: "Docs", icon: BookOpen, href: "/app/docs" },
           { label: "Projetos", icon: Folder },
           { label: "Tarefas", icon: ClipboardList },
           { label: "Kanban", icon: KanbanSquare },
           { label: "Perfil", icon: User }
-        ].map((item) => (
-          <button
-            key={item.label}
-            type="button"
-            className={`flex flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition ${
-              item.active ? "text-stone-900" : "text-stone-500"
-            }`}
-          >
-            <item.icon className="h-4 w-4" />
-            {item.label}
-          </button>
-        ))}
+        ].map((item) => {
+          const isActive = item.href ? pathname === item.href : false;
+          const classes = `flex flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition ${
+            isActive ? "text-stone-900" : "text-stone-500"
+          }`;
+          return item.href ? (
+            <Link key={item.label} href={item.href} className={classes}>
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </Link>
+          ) : (
+            <button key={item.label} type="button" className={classes}>
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </button>
+          );
+        })}
       </nav>
 
       <TaskModal

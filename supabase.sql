@@ -20,6 +20,17 @@ create table if not exists tasks (
   updated_at timestamptz default now()
 );
 
+create table if not exists docs (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  title text not null,
+  content text not null,
+  language text not null check (language in ('html','css','js')),
+  visibility text not null default 'personal' check (visibility in ('personal','public')),
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
 create or replace function set_updated_at()
 returns trigger as $$
 begin
@@ -33,8 +44,14 @@ create trigger tasks_set_updated_at
 before update on tasks
 for each row execute function set_updated_at();
 
+drop trigger if exists docs_set_updated_at on docs;
+create trigger docs_set_updated_at
+before update on docs
+for each row execute function set_updated_at();
+
 alter table projects enable row level security;
 alter table tasks enable row level security;
+alter table docs enable row level security;
 
 create policy "projects_select_own"
   on projects for select
@@ -66,4 +83,20 @@ create policy "tasks_update_own"
 
 create policy "tasks_delete_own"
   on tasks for delete
+  using (auth.uid() = user_id);
+
+create policy "docs_select_visible"
+  on docs for select
+  using (visibility = 'public' or auth.uid() = user_id);
+
+create policy "docs_insert_own"
+  on docs for insert
+  with check (auth.uid() = user_id);
+
+create policy "docs_update_own"
+  on docs for update
+  using (auth.uid() = user_id);
+
+create policy "docs_delete_own"
+  on docs for delete
   using (auth.uid() = user_id);
